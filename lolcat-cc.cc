@@ -18,95 +18,38 @@
 #include <vector>
 #include <time.h>
 
-#if defined _WIN32 || defined _WIN64
-	#include <Windows.h>
-	
-	const HANDLE  hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	struct WinConsoleColor
-	{
-		int col;
-
-		WinConsoleColor(const int& Col)
-		{
-			col = Col;
-		}
-
-		WinConsoleColor(const int& foreground, const int& background)
-		{
-			col = foreground + background*16;
-		}
-	};
-
-	std::ostream& operator<<(std::ostream& os, const WinConsoleColor& cc)
-	{
-		if(&os == &std::cout)
-		{
-			FlushConsoleInputBuffer(hConsole);
-			SetConsoleTextAttribute(hConsole, cc.col);
-		}
-
-		return os;
-	}
-
-	int noColors = 9;
-	WinConsoleColor c_white(15);
-	std::vector<WinConsoleColor> colors = {WinConsoleColor(4),
-	                                       WinConsoleColor(12),
-	                                       WinConsoleColor(6),
-	                                       WinConsoleColor(10),
-	                                       WinConsoleColor(2),
-	                                       WinConsoleColor(3),
-	                                       WinConsoleColor(1),
-	                                       WinConsoleColor(5),
-	                                       WinConsoleColor(13)};
-									  
-	void powershell_colours()
-	{
-		noColors = 7;
-		c_white = WinConsoleColor(15, 5);
-		colors = std::vector<WinConsoleColor>{WinConsoleColor(12, 5),
-		                                      WinConsoleColor(14, 5),
-		                                      WinConsoleColor(10, 5),
-		                                      WinConsoleColor(2, 5),
-		                                      WinConsoleColor(3, 5),
-		                                      WinConsoleColor(9, 5),
-		                                      WinConsoleColor(13, 5)};
-	}
-#else
-	const int noColors = 30;
-	const std::string c_white  =  "\033[0m";
-	const std::string colors[] = {"\033[38;5;39m",
-	                              "\033[38;5;38m",
-	                              "\033[38;5;44m",
-	                              "\033[38;5;43m",
-	                              "\033[38;5;49m",
-	                              "\033[38;5;48m",
-	                              "\033[38;5;84m",
-	                              "\033[38;5;83m",
-	                              "\033[38;5;119m",
-	                              "\033[38;5;118m",
-	                              "\033[38;5;154m",
-	                              "\033[38;5;148m",
-	                              "\033[38;5;184m",
-	                              "\033[38;5;178m",
-	                              "\033[38;5;214m",
-	                              "\033[38;5;208m",
-	                              "\033[38;5;209m",
-	                              "\033[38;5;203m",
-	                              "\033[38;5;204m",
-	                              "\033[38;5;198m",
-	                              "\033[38;5;199m",
-	                              "\033[38;5;163m",
-	                              "\033[38;5;164m",
-	                              "\033[38;5;128m",
-	                              "\033[38;5;129m",
-	                              "\033[38;5;93m",
-	                              "\033[38;5;99m",
-	                              "\033[38;5;63m",
-	                              "\033[38;5;69m",
-	                              "\033[38;5;33m"};
-#endif
+const int noColors = 30;
+const std::string c_white  =  "\033[0m";
+const std::string colors[] = {"\033[38;5;39m",
+			      "\033[38;5;38m",
+			      "\033[38;5;44m",
+			      "\033[38;5;43m",
+			      "\033[38;5;49m",
+			      "\033[38;5;48m",
+			      "\033[38;5;84m",
+			      "\033[38;5;83m",
+			      "\033[38;5;119m",
+			      "\033[38;5;118m",
+			      "\033[38;5;154m",
+			      "\033[38;5;148m",
+			      "\033[38;5;184m",
+			      "\033[38;5;178m",
+			      "\033[38;5;214m",
+			      "\033[38;5;208m",
+			      "\033[38;5;209m",
+			      "\033[38;5;203m",
+			      "\033[38;5;204m",
+			      "\033[38;5;198m",
+			      "\033[38;5;199m",
+			      "\033[38;5;163m",
+			      "\033[38;5;164m",
+			      "\033[38;5;128m",
+			      "\033[38;5;129m",
+			      "\033[38;5;93m",
+			      "\033[38;5;99m",
+			      "\033[38;5;63m",
+			      "\033[38;5;69m",
+			      "\033[38;5;33m"};
 
 bool file_exists(const std::string& path)
 {
@@ -309,9 +252,6 @@ int main(int argc, char ** argv)
 			addLineNo = 1;
 		else if(param == "-ps")
 		{
-			#if defined _WIN32 || defined _WIN64
-				powershell_colours();
-			#endif
 		}
 		else if(param.substr(0, 4) == "-tw=")
 			tabWidth = std::atoi(param.substr(4, param.size()-4).c_str());
